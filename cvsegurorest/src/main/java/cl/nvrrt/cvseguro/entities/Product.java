@@ -14,23 +14,21 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Document(collection = "users")
+@Document(collection = "products")
 @Getter
 @Setter
 @ToString
-public class User {
-	
-	@Id
-	private String id;
-	
-	@JsonSerialize(using=LocalDateTimeSerializer.class)
+public class Product {
+    
+    @Id
+    private String id;
+
+    private String nameProdcut;
+
+    @JsonSerialize(using=LocalDateTimeSerializer.class)
 	@JsonDeserialize(using=LocalDateTimeDeserializer.class)
-	private LocalDateTime fecha; //deberia ser fecha de nacimiento
-	
-	private String name;
-	private String lastname;
-	private String email;
-	private String password;
-	private String direccion;
+    private LocalDateTime fechaPublicacion;
+    private Integer price;
+    private String description;
 
 }

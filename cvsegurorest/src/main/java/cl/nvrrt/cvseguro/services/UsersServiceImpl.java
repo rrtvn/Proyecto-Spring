@@ -10,6 +10,8 @@ import cl.nvrrt.cvseguro.repositories.UsersRepository;
 
 @Service
 public class UsersServiceImpl implements UsersService{
+
+	//Comunicacion con MongoDB
 	
 	@Autowired
 	private UsersRepository userRepo;
@@ -17,6 +19,7 @@ public class UsersServiceImpl implements UsersService{
 	@Override
 	public User save(User u) {
 		// TODO Auto-generated method stub
+
 		return userRepo.save(u);
 	}
 
@@ -24,6 +27,16 @@ public class UsersServiceImpl implements UsersService{
 	public List<User> getAll() {
 		// TODO Auto-generated method stub
 		return userRepo.findAll();
+	}
+
+	@Override
+	public void delete(String id) {
+		
+		userRepo.deleteById(id);
+		System.out.println("User " + id + " eliminado...");
+		
+		
+		
 	}
 
 }

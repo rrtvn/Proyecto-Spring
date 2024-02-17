@@ -8,4 +8,5 @@ public interface UsersService {
 
 	User save(User u);
 	List<User> getAll();
+	void delete(String  id);
 }
