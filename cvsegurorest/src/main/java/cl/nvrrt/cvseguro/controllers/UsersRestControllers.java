@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.nvrrt.cvseguro.entities.User;
-import cl.nvrrt.cvseguro.services.UsersService;
+import cl.nvrrt.cvseguro.services.user.UsersService;
 
 @CrossOrigin(origins = {"*"})
 @RestController

@@ -1,4 +1,4 @@
-package cl.nvrrt.cvseguro.services;
+package cl.nvrrt.cvseguro.services.user;
 
 import java.util.List;
 
@@ -18,24 +18,22 @@ public class UsersServiceImpl implements UsersService{
 
 	@Override
 	public User save(User u) {
-		// TODO Auto-generated method stub
+		// REGISTRA UN USUARIO
 
 		return userRepo.save(u);
 	}
 
 	@Override
 	public List<User> getAll() {
-		// TODO Auto-generated method stub
+		// OBTENER LISTADO DE USUARIOS
 		return userRepo.findAll();
 	}
 
 	@Override
 	public void delete(String id) {
-		
+		//ELIMINA UN USUARIO POR ID
 		userRepo.deleteById(id);
 		System.out.println("User " + id + " eliminado...");
-		
-		
 		
 	}
 

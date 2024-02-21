@@ -1,4 +1,4 @@
-package cl.nvrrt.cvseguro.services;
+package cl.nvrrt.cvseguro.services.user;
 
 import java.util.List;
 

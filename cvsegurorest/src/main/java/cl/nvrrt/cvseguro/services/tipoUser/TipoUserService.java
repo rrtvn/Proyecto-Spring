@@ -6,7 +6,7 @@ import cl.nvrrt.cvseguro.entities.TipoUser;
 
 public interface TipoUserService {
 
-    TipoUserService save(TipoUser  tipoUser);
+    TipoUser save(TipoUser  tipoUser);
     List<TipoUser> getAll();
     void delete(String id);    
     

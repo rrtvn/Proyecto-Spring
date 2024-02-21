@@ -9,21 +9,24 @@ import cl.nvrrt.cvseguro.entities.TipoUser;
 import cl.nvrrt.cvseguro.repositories.TipoUserRepository;
 
 @Service
-public class TipoUserServiceImpl  implements TipoUserService{
+public class TipoUserServiceImpl implements TipoUserService {
+
+    //COMUNICACION CON MONGO
 
     @Autowired
     private TipoUserRepository tipoUserRepo;
-    
+
     @Override
-    public TipoUserService save(TipoUser tipoUser) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+    public TipoUser save(TipoUser tipoUser) {
+        //REGISTRAR TIPO DE USUARIO
+        return tipoUserRepo.save(tipoUser);
+
     }
 
     @Override
     public List<TipoUser> getAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAll'");
+        // OBTENER TIPOS DE USUARIO
+        return tipoUserRepo.findAll();
     }
 
     @Override
@@ -31,5 +34,5 @@ public class TipoUserServiceImpl  implements TipoUserService{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'delete'");
     }
-    
+
 }
