@@ -14,9 +14,9 @@ public interface UsersService {
 	void delete(String  id);
 
 	
-	@Query("{ 'email' : ?0 }")
+	
 	User  findByEmail(String email);
 	
-	boolean authenticate(String email, String password);
+	Boolean authenticate(User user);
 	// Optional<User> findByEmailAndPassword(String email, String password);
 }

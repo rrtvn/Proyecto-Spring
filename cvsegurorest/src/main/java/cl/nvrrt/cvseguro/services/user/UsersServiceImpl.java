@@ -15,6 +15,8 @@ import com.mongodb.client.MongoCursor;
 import cl.nvrrt.cvseguro.entities.Login;
 import cl.nvrrt.cvseguro.entities.User;
 import cl.nvrrt.cvseguro.repositories.UsersRepository;
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 
 @Service
 public class UsersServiceImpl implements UsersService{
@@ -59,11 +61,36 @@ public class UsersServiceImpl implements UsersService{
 		return userRepo.findByEmail(email);
 	}
 
+	
+
 	@Override
-	public boolean authenticate(String email, String password) {
+	public Boolean authenticate(User user) {
 		// TODO Auto-generated method stub
-		User user = userRepo.findByEmail(email);
-		return user != null ;
+		User userFind = userRepo.findByEmail(user.getEmail());
+
+		if(userFind != null){
+
+			String passLogged = userFind.getPassword();
+	
+			Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
+
+			boolean verifyPass = argon2.verify(passLogged, user.getPassword());
+			if (!verifyPass) {
+				
+				System.out.println("Contraseña incorrecta...");
+				return false;
+			}else{
+				System.out.println(user.getEmail()+ " Email autenticado correctamente.");
+				return true;
+			}
+		}else{
+			System.out.println(user.getEmail()+" no existe en la base de datos.");
+			return false;
+		}
+
+		
+			
+		
 	}
 
 	

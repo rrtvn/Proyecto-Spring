@@ -1,16 +1,13 @@
 package cl.nvrrt.cvseguro.controllers;
 
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.nvrrt.cvseguro.entities.User;
-import cl.nvrrt.cvseguro.repositories.UsersRepository;
 import cl.nvrrt.cvseguro.services.user.UsersService;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,17 +19,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AuthControllers {
 
     @Autowired
-    private UsersService loginService;
+    UsersService userService;
 
     @PostMapping("/login")
-    public String login(@RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<?> login(@RequestBody User user) {
 
-        if (loginService.authenticate(email, password)) {
-            User userLogged = loginService.findByEmail(email);
-            return "Usuario autenticado " + userLogged.getEmail();
-        } else {
-            return "Email o contraseña incorrectos";
+        
+        if (!userService.authenticate(user)) {
+            return ResponseEntity.badRequest()
+                                .body("Usuario o contraseña incorrectos");
+        }else{
+
+            return ResponseEntity.ok(user.getEmail() + ", bienvenido!");
         }
+
 
     }
 
