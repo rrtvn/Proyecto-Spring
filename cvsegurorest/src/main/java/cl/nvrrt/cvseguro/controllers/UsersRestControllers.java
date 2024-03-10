@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +20,8 @@ import cl.nvrrt.cvseguro.services.user.UsersService;
 import cl.nvrrt.cvseguro.utils.JWTUtil;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @CrossOrigin(origins = {"*"})
 @RestController
@@ -34,12 +37,37 @@ public class UsersRestControllers {
 	@Autowired
 	private JWTUtil jwtUtil;
 
-	@GetMapping("/get")
-	public List<User> getAll(User user) {
+	@GetMapping("/get/{token}")
+	public ResponseEntity<User> getAll(@RequestHeader(value = "Authorization") String token) {
 		// System.out.println(token);
-		// if (!jwtUtil.validateToken(token)) {return null;}
+		if (!jwtUtil.validateJwtToken(token)) {
+			return null;
+		}else{
+
+			String userId = jwtUtil.getUserNameFromJwtToken(token);
+			System.out.println(userId);
+			return ResponseEntity.ok().body(userService.findById(userId));
+		}
+	}
+
+	@GetMapping("/get")
+	public List<User> findAllUsers(User user) {
 		return userService.getAll();
 	}
+	
+
+	// @GetMapping("/get/{token}")
+	// public ResponseEntity<?> getUserForToken(@RequestHeader(value = "Authorization") String token ){
+	// 	if (!validarToken(token)) { return null; }
+	// 	String id = jwtUtil.getUsernameFromToken(token);
+	// 	User userFind = userService.findById(id);
+	// 	return ResponseEntity.ok(userFind);
+	// }
+
+	// public boolean validarToken(String token){
+	// 	String userId = jwtUtil.getUsernameFromToken(token);
+	// 	return userId != null;
+	// }
 
 	
 	@PostMapping("/post")
@@ -50,14 +78,17 @@ public class UsersRestControllers {
 		user.setPassword(hash);
 
 
-		String token = jwtUtil.generateToken(user.toString());
+		String token = jwtUtil.generateToken(user.getId());
 		System.out.println(token);
+
 		
-		return ResponseEntity.ok(userService.save(user));
+		
+		return ResponseEntity.ok(token);
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public void delete(@PathVariable String id){
+	public ResponseEntity<?> delete(@PathVariable String id){
 		userService.delete(id);
+		return ResponseEntity.ok(id);
 	}
 }

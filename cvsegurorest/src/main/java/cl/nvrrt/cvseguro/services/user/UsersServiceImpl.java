@@ -1,18 +1,8 @@
 package cl.nvrrt.cvseguro.services.user;
 
 import java.util.List;
-import java.util.Optional;
-
-import javax.management.Query;
-
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
-
-import com.mongodb.client.MongoCursor;
-
-import cl.nvrrt.cvseguro.entities.Login;
 import cl.nvrrt.cvseguro.entities.User;
 import cl.nvrrt.cvseguro.repositories.UsersRepository;
 import de.mkammerer.argon2.Argon2;
@@ -25,8 +15,6 @@ public class UsersServiceImpl implements UsersService{
 	
 	@Autowired
 	private UsersRepository userRepo;
-
-	
 
 	@Override
 	public User save(User u) {
@@ -49,25 +37,21 @@ public class UsersServiceImpl implements UsersService{
 		
 	}
 
-	// @Override
-	// public Optional<User> findByEmailAndPassword(String email, String  password) {
-	// 	// TODO Auto-generated method stub
-	// 	return userRepo.findByEmailAndPassword(email, password);
-	// }
-
+	
 	@Override
 	public User findByEmail(String email) {
-		// TODO Auto-generated method stub
-		return userRepo.findByEmail(email);
+		// Buscamos por  correo electronico
+		User user = userRepo.findByEmail(email);
+		return user;
 	}
 
 	
 
 	@Override
 	public Boolean authenticate(User user) {
-		// TODO Auto-generated method stub
+		// Se busca usuario por email 
 		User userFind = userRepo.findByEmail(user.getEmail());
-
+		// Se valida si es null
 		if(userFind != null){
 
 			String passLogged = userFind.getPassword();
@@ -92,6 +76,14 @@ public class UsersServiceImpl implements UsersService{
 			
 		
 	}
+
+	@Override
+	public User findById(String id) {
+		// Buscamos por id
+		return userRepo.findById(id).orElse(null);
+	}
+
+	
 
 	
 

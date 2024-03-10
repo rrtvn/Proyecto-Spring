@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cl.nvrrt.cvseguro.entities.User;
 import cl.nvrrt.cvseguro.services.user.UsersService;
+import cl.nvrrt.cvseguro.utils.JWTUtil;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,18 +20,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AuthControllers {
 
     @Autowired
-    UsersService userService;
+    private UsersService userService;
+    @Autowired
+    private JWTUtil jwtUtil;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
 
         
         if (!userService.authenticate(user)) {
+            
             return ResponseEntity.badRequest()
                                 .body("Usuario o contraseña incorrectos");
         }else{
-
-            return ResponseEntity.ok(user.getEmail() + ", bienvenido!");
+            String token = jwtUtil.generateToken(user.getId());
+            return ResponseEntity.ok(token);
         }
 
 
