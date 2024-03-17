@@ -3,6 +3,7 @@ package cl.nvrrt.cvseguro.entities;
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -29,6 +30,7 @@ public class User {
 	
 	private String name;
 	private String lastname;
+	@Indexed(unique = true) 
 	private String email;
 	private String password;
 	private String direccion;

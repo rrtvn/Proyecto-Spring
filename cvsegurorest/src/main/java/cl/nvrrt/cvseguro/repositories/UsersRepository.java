@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import cl.nvrrt.cvseguro.entities.User;
 
 
+
 public interface UsersRepository extends MongoRepository<User, String> {
     
     Optional<User> findByEmailAndPassword(String email, String password);

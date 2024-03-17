@@ -20,6 +20,7 @@ import cl.nvrrt.cvseguro.utils.JWTUtil;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 
+
 @CrossOrigin(origins = {"*"})
 @RestController
 @RequestMapping("/api/users") //http://localhost:8080/cvsegurodb
@@ -34,12 +35,36 @@ public class UsersRestControllers {
 	@Autowired
 	private JWTUtil jwtUtil;
 
+	// @GetMapping("/get/{token}")
+	// public ResponseEntity<User> getAll(@RequestHeader(value = "Authorization") String token) {
+	// 	// System.out.println(token);
+		
+	// }
+
 	@GetMapping("/get")
-	public List<User> getAll(User user) {
-		// System.out.println(token);
-		// if (!jwtUtil.validateToken(token)) {return null;}
-		return userService.getAll();
+	public ResponseEntity< List<User>> findAllUsers(User user) {
+		try {
+			
+			return ResponseEntity.ok(userService.getAll());
+		} catch (Exception e) {
+			// TODO: handle exception
+			throw new Error(e.getMessage());
+		}
 	}
+	
+
+	// @GetMapping("/get/{token}")
+	// public ResponseEntity<?> getUserForToken(@RequestHeader(value = "Authorization") String token ){
+	// 	if (!validarToken(token)) { return null; }
+	// 	String id = jwtUtil.getUsernameFromToken(token);
+	// 	User userFind = userService.findById(id);
+	// 	return ResponseEntity.ok(userFind);
+	// }
+
+	// public boolean validarToken(String token){
+	// 	String userId = jwtUtil.getUsernameFromToken(token);
+	// 	return userId != null;
+	// }
 
 	
 	@PostMapping("/post")
@@ -50,14 +75,17 @@ public class UsersRestControllers {
 		user.setPassword(hash);
 
 
-		String token = jwtUtil.generateToken(user.toString());
+		String token = jwtUtil.generateToken(user.getId());
 		System.out.println(token);
+
 		
-		return ResponseEntity.ok(userService.save(user));
+		
+		return ResponseEntity.ok(token);
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public void delete(@PathVariable String id){
+	public ResponseEntity<?> delete(@PathVariable String id){
 		userService.delete(id);
+		return ResponseEntity.ok(id);
 	}
 }

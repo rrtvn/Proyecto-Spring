@@ -16,8 +16,6 @@ public class UsersServiceImpl implements UsersService{
 	@Autowired
 	private UsersRepository userRepo;
 
-	
-
 	@Override
 	public User save(User u) {
 		// REGISTRA UN USUARIO
@@ -39,25 +37,21 @@ public class UsersServiceImpl implements UsersService{
 		
 	}
 
-	// @Override
-	// public Optional<User> findByEmailAndPassword(String email, String  password) {
-	// 	// TODO Auto-generated method stub
-	// 	return userRepo.findByEmailAndPassword(email, password);
-	// }
-
+	
 	@Override
 	public User findByEmail(String email) {
-		// TODO Auto-generated method stub
-		return userRepo.findByEmail(email);
+		// Buscamos por  correo electronico
+		User user = userRepo.findByEmail(email);
+		return user;
 	}
 
 	
 
 	@Override
 	public Boolean authenticate(User user) {
-		// TODO Auto-generated method stub
+		// Se busca usuario por email 
 		User userFind = userRepo.findByEmail(user.getEmail());
-
+		// Se valida si es null
 		if(userFind != null){
 
 			String passLogged = userFind.getPassword();
@@ -82,6 +76,14 @@ public class UsersServiceImpl implements UsersService{
 			
 		
 	}
+
+	@Override
+	public User findById(String id) {
+		// Buscamos por id
+		return userRepo.findById(id).orElse(null);
+	}
+
+	
 
 	
 

@@ -10,10 +10,9 @@ public interface UsersService {
 	List<User> getAll();
 	void delete(String  id);
 
-	
+	User findById(String id);
 	
 	User  findByEmail(String email);
 	
 	Boolean authenticate(User user);
-	// Optional<User> findByEmailAndPassword(String email, String password);
 }
