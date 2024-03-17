@@ -1,18 +1,8 @@
 package cl.nvrrt.cvseguro.services.user;
 
 import java.util.List;
-import java.util.Optional;
-
-import javax.management.Query;
-
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
-
-import com.mongodb.client.MongoCursor;
-
-import cl.nvrrt.cvseguro.entities.Login;
 import cl.nvrrt.cvseguro.entities.User;
 import cl.nvrrt.cvseguro.repositories.UsersRepository;
 import de.mkammerer.argon2.Argon2;

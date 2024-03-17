@@ -1,9 +1,6 @@
 package cl.nvrrt.cvseguro.services.user;
 
 import java.util.List;
-import java.util.Optional;
-
-import org.springframework.data.mongodb.repository.Query;
 
 import cl.nvrrt.cvseguro.entities.User;
 
