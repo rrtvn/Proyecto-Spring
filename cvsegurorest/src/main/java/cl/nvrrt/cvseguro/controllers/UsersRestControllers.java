@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,7 +19,6 @@ import cl.nvrrt.cvseguro.services.user.UsersService;
 import cl.nvrrt.cvseguro.utils.JWTUtil;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @CrossOrigin(origins = {"*"})
@@ -37,22 +35,21 @@ public class UsersRestControllers {
 	@Autowired
 	private JWTUtil jwtUtil;
 
-	@GetMapping("/get/{token}")
-	public ResponseEntity<User> getAll(@RequestHeader(value = "Authorization") String token) {
-		// System.out.println(token);
-		if (!jwtUtil.validateJwtToken(token)) {
-			return null;
-		}else{
-
-			String userId = jwtUtil.getUserNameFromJwtToken(token);
-			System.out.println(userId);
-			return ResponseEntity.ok().body(userService.findById(userId));
-		}
-	}
+	// @GetMapping("/get/{token}")
+	// public ResponseEntity<User> getAll(@RequestHeader(value = "Authorization") String token) {
+	// 	// System.out.println(token);
+		
+	// }
 
 	@GetMapping("/get")
-	public List<User> findAllUsers(User user) {
-		return userService.getAll();
+	public ResponseEntity< List<User>> findAllUsers(User user) {
+		try {
+			
+			return ResponseEntity.ok(userService.getAll());
+		} catch (Exception e) {
+			// TODO: handle exception
+			throw new Error(e.getMessage());
+		}
 	}
 	
 
