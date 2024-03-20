@@ -2,6 +2,7 @@ package cl.nvrrt.cvseguro.entities;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -21,8 +22,9 @@ import lombok.ToString;
 public class Login {
 
 
-    private String email;
-    private String password;    
+    @Id
+    private String id;
+    private String email; 
 
     @JsonSerialize(using=LocalDateTimeSerializer.class)
 	@JsonDeserialize(using=LocalDateTimeDeserializer.class)

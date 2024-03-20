@@ -1,5 +1,9 @@
 package cl.nvrrt.cvseguro.repositories;
 
-public class LoginRepository {
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import cl.nvrrt.cvseguro.entities.Login;
+
+public interface LoginRepository extends MongoRepository<Login, String> {
     
 }

@@ -1,7 +1,7 @@
 version: '3.4'
 services:
-  bd_cvseguro:
-    container_name: bd_cvseguro
+  bd_cvseguroapp:
+    container_name: bd_cvseguroapp
     build:
       context: .
       dockerfile: DockerfileMongo
@@ -10,8 +10,11 @@ services:
     volumes:
     # CUALQUIER BD QUE SE CREE EN MONGO SE VA A GUARDAR EN ESE DIRECTORIO 
     # 
-      - $PWD/../BD_CVSEGURO:/data/db 
+      - $PWD/../BD_CVSEGUROAPP:/data/db 
     networks:
       - cvseguro-net
+
+  
+
 networks:
   cvseguro-net:

@@ -1,5 +1,6 @@
 package cl.nvrrt.cvseguro.controllers;
 
+import java.net.http.HttpHeaders;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,8 +80,8 @@ public class UsersRestControllers {
 		System.out.println(token);
 
 		
-		
-		return ResponseEntity.ok(token);
+		userService.save(user);
+		return ResponseEntity.ok(user);
 	}
 
 	@DeleteMapping("/delete/{id}")
