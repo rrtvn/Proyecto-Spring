@@ -6,4 +6,5 @@ import cl.nvrrt.cvseguro.entities.TipoUser;
 
 public interface TipoUserRepository extends MongoRepository<TipoUser, String>{
     
+    TipoUser findByName(String name);
 }

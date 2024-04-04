@@ -1,6 +1,5 @@
 package cl.nvrrt.cvseguro.controllers;
 
-import java.net.http.HttpHeaders;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import cl.nvrrt.cvseguro.config.security.jwt.service.JWTUtil;
+import cl.nvrrt.cvseguro.entities.TipoUser;
 import cl.nvrrt.cvseguro.entities.User;
 import cl.nvrrt.cvseguro.services.user.UsersService;
-import cl.nvrrt.cvseguro.utils.JWTUtil;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 
@@ -32,6 +32,8 @@ public class UsersRestControllers {
 
 	@Autowired
 	private UsersService userService;
+	@Autowired
+	private TipoUserControllers tipoUserService;
 
 	@Autowired
 	private JWTUtil jwtUtil;
@@ -54,18 +56,25 @@ public class UsersRestControllers {
 	}
 	
 
-	// @GetMapping("/get/{token}")
-	// public ResponseEntity<?> getUserForToken(@RequestHeader(value = "Authorization") String token ){
-	// 	if (!validarToken(token)) { return null; }
-	// 	String id = jwtUtil.getUsernameFromToken(token);
-	// 	User userFind = userService.findById(id);
-	// 	return ResponseEntity.ok(userFind);
-	// }
+	@GetMapping("/get/{token}")
+	public ResponseEntity<?> getUserForToken(@RequestHeader(value = "Authorization") String token ){
+		if (validarToken(token) == null ) { 
+			return null; 
+		}else{
 
-	// public boolean validarToken(String token){
-	// 	String userId = jwtUtil.getUsernameFromToken(token);
-	// 	return userId != null;
-	// }
+			String id = jwtUtil.getUsrFromToken(token);
+			User userFind = userService.findById(id);
+			return ResponseEntity.ok(userFind);
+		}
+		
+	}
+
+	public User validarToken(String token){
+		String userId = jwtUtil.getUsrFromToken(token);
+		User user = userService.findById(userId);
+		System.out.println(userId);
+		return user ;
+	}
 
 	
 	@PostMapping("/post")
@@ -75,9 +84,15 @@ public class UsersRestControllers {
 		String hash = argon2.hash(1, 1024, 1, user.getPassword());
 		user.setPassword(hash);
 
+		// String tipoUserFind = tipoUserService.getByTipoUser(user.getTipoUser());
+		// System.out.println("tipo de usuario : "+tipoUserFind);
+		// if ( tipoUserFind	!= null) {
+		// }
 
-		String token = jwtUtil.generateToken(user.getId());
-		System.out.println(token);
+		
+
+		// String token = jwtUtil.generateToken(null , user.getUsername() );
+		// System.out.println(token);
 
 		
 		userService.save(user);

@@ -11,8 +11,9 @@ import cl.nvrrt.cvseguro.entities.User;
 public interface UsersRepository extends MongoRepository<User, String> {
     
     Optional<User> findByEmailAndPassword(String email, String password);
+    
 
-    User findByEmail(String email);
+    Optional<User> findByEmail(String email);
     Boolean existsByEmail(String email);
 
 }

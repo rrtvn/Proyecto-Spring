@@ -35,4 +35,15 @@ public class TipoUserServiceImpl implements TipoUserService {
         throw new UnsupportedOperationException("Unimplemented method 'delete'");
     }
 
+    @Override
+    public TipoUser findByName(String name) {
+        // TODO Auto-generated method stub
+        TipoUser tipoUserFind = tipoUserRepo.findByName(name);
+        if (tipoUserFind == null) {
+            throw new IllegalArgumentException("Tipo de usuario no encontrado");
+
+        }
+        return tipoUserFind;
+    }
+
 }

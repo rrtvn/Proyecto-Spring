@@ -1,6 +1,8 @@
 package cl.nvrrt.cvseguro.services.user;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cl.nvrrt.cvseguro.entities.User;
@@ -40,7 +42,7 @@ public class UsersServiceImpl implements UsersService{
 	@Override
 	public User findByEmail(String email) {
 		// Buscamos por  correo electronico
-		User user = userRepo.findByEmail(email);
+		User user = userRepo.findByEmail(email.toString()).orElse(null);
 		return user;
 	}
 
@@ -49,11 +51,12 @@ public class UsersServiceImpl implements UsersService{
 	@Override
 	public Boolean authenticate(User user) {
 		// Se busca usuario por email 
-		User userFind = userRepo.findByEmail(user.getEmail());
+		System.out.println("Buscando usuario por email: " + user.getEmail());
+		Optional<User> userFind = userRepo.findByEmail(user.getEmail());
 		// Se valida si es null
 		if(userFind != null){
 
-			String passLogged = userFind.getPassword();
+			String passLogged = userFind.get().getPassword();
 	
 			Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
 

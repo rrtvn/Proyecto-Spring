@@ -5,12 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.nvrrt.cvseguro.entities.TipoUser;
 import cl.nvrrt.cvseguro.services.tipoUser.TipoUserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -28,6 +30,12 @@ public class TipoUserControllers {
     public List<TipoUser> getAll() {
         //LLAMA A METODO GET ALL  DEL SERVICIO Y LO RETORNA
         return tipoUserService.getAll();
+    }
+
+    @GetMapping("/findName")
+    public TipoUser getByTipoUser(@RequestParam String name) {
+        
+        return tipoUserService.findByName(name);
     }
 
     @PostMapping("/post")
