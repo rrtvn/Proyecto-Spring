@@ -35,39 +35,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor // Para habilitar el manejo de permisos y roles en los endpoints REST
 public class ApplicationConfig  {
 
-    @Autowired
+    
     private UsersRepository userRepo;
     
 
-    
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
-        return config.getAuthenticationManager();
-    }
-
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-
     @Bean
     public UserDetailsService userDetailsService(){
-         return username ->  {
-            User user = userRepo.findByEmail(username)
+         return username ->  userRepo.findByEmail(username)
                 .orElseThrow(() -> new  UsernameNotFoundException("User Not Found with -> username or email : " + username));
-
-            return UserDetailsImpl.build(user);    
-         };
         
     }
+    
+    
+
+    
     
 
    

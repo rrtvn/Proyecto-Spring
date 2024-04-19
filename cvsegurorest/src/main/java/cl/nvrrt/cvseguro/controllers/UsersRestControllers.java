@@ -56,25 +56,25 @@ public class UsersRestControllers {
 	}
 	
 
-	@GetMapping("/get/{token}")
-	public ResponseEntity<?> getUserForToken(@RequestHeader(value = "Authorization") String token ){
-		if (validarToken(token) == null ) { 
-			return null; 
-		}else{
+	// @GetMapping("/get/{token}")
+	// public ResponseEntity<?> getUserForToken(@RequestHeader(value = "Authorization") String token ){
+	// 	if (validarToken(token) == null ) { 
+	// 		return null; 
+	// 	}else{
 
-			String id = jwtUtil.getUsrFromToken(token);
-			User userFind = userService.findById(id);
-			return ResponseEntity.ok(userFind);
-		}
+	// 		String id = jwtUtil.generateToken(token);
+	// 		User userFind = userService.findById(id);
+	// 		return ResponseEntity.ok(userFind);
+	// 	}
 		
-	}
+	// }
 
-	public User validarToken(String token){
-		String userId = jwtUtil.getUsrFromToken(token);
-		User user = userService.findById(userId);
-		System.out.println(userId);
-		return user ;
-	}
+	// public User validarToken(String token){
+	// 	String userId = jwtUtil.getUsrFromToken(token);
+	// 	User user = userService.findById(userId);
+	// 	System.out.println(userId);
+	// 	return user ;
+	// }
 
 	
 	@PostMapping("/post")

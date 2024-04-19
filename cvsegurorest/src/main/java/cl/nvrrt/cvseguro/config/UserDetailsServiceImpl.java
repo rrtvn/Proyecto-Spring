@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import cl.nvrrt.cvseguro.entities.User;
 import cl.nvrrt.cvseguro.repositories.UsersRepository;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,22 +18,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
     
     @Autowired
     private UsersRepository userRepo;
 
     @Override
-    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
 
-        User user = userRepo.findByEmail( username )
-            .orElseThrow(() -> new UsernameNotFoundException(
-                "User Not Found with -> username or email : " + username
-            ));
-
-        return UserDetailsImpl.build(user);
+        return userRepo.findByEmail(username).orElseThrow();
     }
     
 }
