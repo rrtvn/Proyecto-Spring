@@ -1,4 +1,4 @@
-package cl.nvrrt.cvseguro.config.security.jwt.model.payload.request;
+package cl.nvrrt.cvseguro.dto;
 
 import lombok.*;
 
@@ -8,5 +8,9 @@ import lombok.*;
 public class LoginRequest {
     private String email;
     private String password;    
+
+    private String token;
+    private String error;
+    private String message;
     
 }

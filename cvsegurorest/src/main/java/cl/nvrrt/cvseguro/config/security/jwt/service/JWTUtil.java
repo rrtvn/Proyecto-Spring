@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.function.Function;
 
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -16,12 +15,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
-import cl.nvrrt.cvseguro.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;
 
 @Component
@@ -91,8 +87,8 @@ public class JWTUtil {
   }
 
   public <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
-    
-    return claimsResolver.apply(Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload());
+    final Claims claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
+    return claimsResolver.apply(claims);
   }
   public boolean isTokenValid(String token, UserDetails UserDetails) {
     

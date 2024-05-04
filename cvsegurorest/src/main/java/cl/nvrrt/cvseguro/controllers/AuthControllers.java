@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cl.nvrrt.cvseguro.config.security.jwt.service.JWTUtil;
 import cl.nvrrt.cvseguro.dto.ReqRes;
 import cl.nvrrt.cvseguro.services.auth.AuthService;
 
@@ -23,17 +22,15 @@ public class AuthControllers {
     @Autowired
     private AuthService authService;
 
-    @Autowired
-    private JWTUtil jwtUtil;
 
     private Logger logger = LoggerFactory.getLogger(AuthControllers.class);
     
 
                        
     @PostMapping("/signIn")
-    public ResponseEntity<?> signIn(@RequestBody ReqRes signInRequest) throws Exception {
+    public ResponseEntity<?> signIn(@RequestBody ReqRes loginRequest) throws Exception {
         
-        return ResponseEntity.ok(authService.singIn(signInRequest));
+        return ResponseEntity.ok(authService.singIn(loginRequest));
     }
 
     @PostMapping("/signUp")

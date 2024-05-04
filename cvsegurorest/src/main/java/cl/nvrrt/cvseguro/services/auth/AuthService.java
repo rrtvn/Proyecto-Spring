@@ -1,72 +1,81 @@
 package cl.nvrrt.cvseguro.services.auth;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import cl.nvrrt.cvseguro.config.security.jwt.service.JWTUtil;
 import cl.nvrrt.cvseguro.dto.ReqRes;
-import cl.nvrrt.cvseguro.entities.ETipoUser;
-import cl.nvrrt.cvseguro.entities.TipoUser;
+import cl.nvrrt.cvseguro.dto.SignUpResponseDto;
 import cl.nvrrt.cvseguro.entities.User;
 import cl.nvrrt.cvseguro.repositories.UsersRepository;
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class AuthService {
 
-    @Autowired
+    
     private JWTUtil jwtUtil;
     
-    @Autowired
+    
     private UsersRepository userRepo;
-
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public ReqRes singUp(ReqRes signUpRequest) {
+    public SignUpResponseDto singUp(ReqRes signUpRequest) {
         LocalDateTime localDateTime = LocalDateTime.now();
-        ReqRes resp = new ReqRes();
+        SignUpResponseDto request = new SignUpResponseDto();
         try {
             User user = new User();
-            System.out.println(signUpRequest.getTUser());
             user.setEmail(signUpRequest.getEmail());
-            user.setPassword(signUpRequest.getPassword());
+
+            user.setPassword(passwordEncoder.encode(signUpRequest.getLastname()));
             user.setFecha(LocalDateTime.now()); 
-            user.setTUser( ETipoUser.USER.name() );
-            user.setName(signUpRequest.getName());
+            user.setTUser( signUpRequest.getRole() );
+            //TODO: VERIFICAR ZONA HORARIA DE LA FECHA
             user.setFecha(localDateTime);
-            user.setLastname(signUpRequest.getLastname());
             user.setUsername(signUpRequest.getEmail());
+            user.setName(signUpRequest.getName());
+            user.setLastname(signUpRequest.getLastname());
             user.setDireccion(signUpRequest.getDireccion());
             User userSaved = userRepo.save(user);
             // System.out.println(token);
             if (userSaved != null) {
-                //ENVIAMOS DATOS AL BODY DE MOMENTO YDEAN ENVIAR AL 
-                // resp.setUsername(userSaved.getUsername());
-                String token = jwtUtil.generateToken(userSaved);
-                resp.setToken(token);
-                resp.setMessage("User saved Succesfully");
-                resp.setStatusCode(200);
             }
+            //ENVIAMOS DATOS AL BODY DE MOMENTO YDEAN ENVIAR AL 
+            // resp.setUsername(userSaved.getUsername());
+            String token = jwtUtil.generateToken(userSaved);
+            request.setToken(token);
+            request.setEmail(userSaved.getEmail());
+            request.setName(userSaved.getName());
+            request.setPassword(userSaved.getPassword());
+            request.setMessage(userSaved.getTUser() + " resgistered saved Succesfully");
         } catch (Exception e) {
-            resp.setStatusCode(500);
-            resp.setError(e.getMessage());
+            // request.setStatusCode(500);
+            request.setError(e.getMessage());
+            System.out.println(e.getMessage());
         }
-        return resp;
+        return request;
     }
-    public ReqRes singIn(ReqRes signInRequest) {
+    public ReqRes singIn(ReqRes loginRequest) {
         ReqRes resp = new ReqRes();
+        String pass = passwordEncoder.encode(loginRequest.getPassword());
+        resp.setUsername(loginRequest.getEmail());
+        resp.setPassword(pass);
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInRequest.getEmail(), signInRequest.getPassword()));
-            User user = userRepo.findByEmail(signInRequest.getEmail()).orElseThrow();
-            System.out.println(user);
+            // authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(resp.getEmail(), pass));
+            User user = userRepo.findByEmail(loginRequest.getEmail()).orElseThrow(
+                () -> new RuntimeException("User not found with username: " + loginRequest.getEmail()));
+            System.out.println("User found:" +user);
             String jwt = jwtUtil.generateToken(user);
-            // String refreshToken = jwtUtil.generateRefreshToken(new HashMap<>(), user);
+            // String refreshToken = jwtUtil.generateToken(new HashMap<>(), user);
             resp.setStatusCode(200);
             resp.setToken(jwt);    
             // resp.setRefreshToken(refreshToken);
@@ -74,7 +83,10 @@ public class AuthService {
             resp.setMessage("Successfully Signed In");
 
             
-        } catch (Exception e) {
+        } catch (BadCredentialsException e) {
+            resp.setStatusCode(500);
+            resp.setError(e.getMessage());
+        } catch (Exception e){
             resp.setStatusCode(500);
             resp.setError(e.getMessage());
         }
